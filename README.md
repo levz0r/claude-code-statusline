@@ -14,6 +14,15 @@ A powerful, feature-rich statusline for [Claude Code](https://claude.ai/code) th
 - 💰 **Cost calculation** - Session cost based on model-specific pricing
 - 🎨 **Color-coded display** for easy visual scanning
 
+## Screenshot
+
+![Claude Code StatusLine](screenshot.png)
+
+**Example output:**
+```
+~/Dev/apeiros/data on develop? [Sonnet 4.5 | 7,599,934 ($3.22)]
+```
+
 **Colors:**
 
 - Green: Directory path
@@ -24,6 +33,8 @@ A powerful, feature-rich statusline for [Claude Code](https://claude.ai/code) th
 - Green: Cost
 
 ## Installation
+
+### Linux / macOS / WSL
 
 1. **Copy the script to your Claude Code config directory:**
 
@@ -45,7 +56,44 @@ A powerful, feature-rich statusline for [Claude Code](https://claude.ai/code) th
 
    Replace `YOUR_USERNAME` with your actual username.
 
+### Windows (PowerShell) - ⚠️ UNTESTED
+
+> **Note:** This PowerShell version is provided as-is and has not been tested on Windows. Please report any issues or improvements!
+
+1. **Copy the PowerShell script:**
+
+   ```powershell
+   # Create .claude directory if it doesn't exist
+   New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude"
+
+   # Download the script
+   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/levz0r/claude-code-statusline/main/statusline.ps1" -OutFile "$env:USERPROFILE\.claude\statusline-command.ps1"
+   ```
+
+2. **Update your Claude Code settings** (typically at `%USERPROFILE%\.claude\settings.json`):
+
+   ```json
+   {
+     "statusLine": {
+       "type": "command",
+       "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\.claude\\statusline-command.ps1\""
+     }
+   }
+   ```
+
+3. **Ensure PowerShell execution policy allows the script:**
+
+   ```powershell
+   # Check current policy
+   Get-ExecutionPolicy
+
+   # If needed, set to allow local scripts (run as Administrator)
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```
+
 ## Requirements
+
+### Linux / macOS / WSL
 
 - **jq** - JSON processor for parsing transcript data
 
@@ -61,6 +109,10 @@ A powerful, feature-rich statusline for [Claude Code](https://claude.ai/code) th
   ```
 
 - **bc** - Basic calculator for cost calculations (usually pre-installed)
+
+### Windows (PowerShell)
+
+No additional requirements! PowerShell has built-in JSON parsing and math capabilities.
 
 ## How It Works
 
@@ -122,6 +174,7 @@ Edit the script to customize:
 
 ### Color Codes
 
+**Bash (Linux/macOS):**
 ```bash
 \033[32m  # Green
 \033[35m  # Magenta
@@ -129,6 +182,16 @@ Edit the script to customize:
 \033[33m  # Yellow
 \033[31m  # Red
 \033[0m   # Reset
+```
+
+**PowerShell (Windows):**
+```powershell
+"`e[32m"  # Green
+"`e[35m"  # Magenta
+"`e[36m"  # Cyan
+"`e[33m"  # Yellow
+"`e[31m"  # Red
+"`e[0m"   # Reset
 ```
 
 ## Troubleshooting
@@ -155,7 +218,14 @@ Verify:
 
 - The model name in the statusline matches your actual model
 - Pricing constants in the script match current Claude API rates
-- `bc` is installed for calculations
+- `bc` is installed for calculations (Linux/macOS)
+
+### Windows-specific issues
+
+- **Colors not showing:** Ensure you're using Windows Terminal or a terminal that supports ANSI escape codes (PowerShell 5.1+ or Windows 10+)
+- **Execution policy error:** Run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` as described in installation
+- **Path issues:** Make sure paths use backslashes and are properly escaped in the JSON settings file
+- **Script not found:** Verify the path in settings.json points to the correct location: `%USERPROFILE%\.claude\statusline-command.ps1`
 
 ## Contributing
 
