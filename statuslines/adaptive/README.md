@@ -4,6 +4,8 @@
 
 A compact Python status line that switches palettes with your light/dark appearance and wraps instead of clipping in narrow panes.
 
+![Adaptive status line in dark and light mode](screenshot.png)
+
 ```
  ~/proj   main ●2 ↑1 │ Opus 5.5 high │ ██░░░░ 41% 82k │  0.12 · 5m │ 5h 30%
 ```
